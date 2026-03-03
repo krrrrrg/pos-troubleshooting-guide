@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>포스(POS) 매장 장애 대응 가이드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a56db;
+      --primary-light: #e8eefb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --success: #16a34a;
+      --success-light: #f0fdf4;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.7;
+      background: #f0f2f5;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* — Header — */
+    .header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1a56db 50%, #3b82f6 100%);
+      color: white;
+      padding: 48px 40px 36px;
+      border-radius: var(--radius);
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 50%;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: -30px;
+      width: 160px;
+      height: 160px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 50%;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .header-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* — Section — */
+    .section {
+      background: white;
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--gray-200);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+    }
+
+    .subsection-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin: 28px 0 16px;
+      padding-left: 14px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .subsection-title:first-of-type {
+      margin-top: 0;
+    }
+
+    /* — Blocks — */
+    .block {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+
+    .block-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .block-symptom {
+      background: var(--danger-light);
+      border-left: 4px solid var(--danger);
+    }
+
+    .block-symptom .block-title {
+      color: var(--danger);
+    }
+
+    .block-precheck {
+      background: var(--warning-light);
+      border-left: 4px solid var(--warning);
+    }
+
+    .block-precheck .block-title {
+      color: #b45309;
+    }
+
+    .block-primary {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+    }
+
+    .block-primary .block-title {
+      color: var(--primary);
+    }
+
+    .block-secondary {
+      background: var(--gray-50);
+      border-left: 4px solid var(--gray-500);
+    }
+
+    .block-secondary .block-title {
+      color: var(--gray-600);
+    }
+
+    .block-emergency {
+      background: var(--success-light);
+      border-left: 4px solid var(--success);
+    }
+
+    .block-emergency .block-title {
+      color: var(--success);
+    }
+
+    .block-prevent {
+      background: #faf5ff;
+      border-left: 4px solid #7c3aed;
+    }
+
+    .block-prevent .block-title {
+      color: #7c3aed;
+    }
+
+    .block ul,
+    .block ol {
+      padding-left: 20px;
+      font-size: 14px;
+    }
+
+    .block li {
+      margin-bottom: 4px;
+    }
+
+    .block li strong {
+      color: var(--gray-900);
+    }
+
+    .sub-list {
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .sub-list li {
+      color: var(--gray-600);
+      font-size: 13px;
+    }
+
+    code {
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: 'SF Mono', Menlo, monospace;
+    }
+
+    /* — Contact Table — */
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .contact-table th {
+      background: var(--primary);
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .contact-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .contact-table tr:nth-child(even) td {
+      background: var(--gray-50);
+    }
+
+    /* — Checklist — */
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checklist li::before {
+      content: '☐';
+      font-size: 18px;
+      color: var(--gray-400);
+      flex-shrink: 0;
+    }
+
+    /* — Flow Badge — */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #92400e;
+    }
+
+    .flow .arrow {
+      font-size: 16px;
+      color: #b45309;
+    }
+
+    .flow .step {
+      background: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #f59e0b;
+    }
+
+    /* — Footer — */
+    .footer {
+      text-align: center;
+      color: var(--gray-500);
+      font-size: 12px;
+      padding: 24px 0 8px;
+    }
+
+    /* — Divider within sections — */
+    .divider {
+      border: none;
+      border-top: 1px dashed var(--gray-300);
+      margin: 28px 0;
+    }
+
+    /* — Print — */
+    @media print {
+      body {
+        background: white;
+      }
+
+      .container {
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .section {
+        box-shadow: none;
+        break-inside: avoid;
+        border: 1px solid var(--gray-300);
+      }
+
+      .header {
+        border-radius: 0;
+      }
+
+      .subsection-title {
+        break-after: avoid;
+      }
+
+      .block {
+        break-inside: avoid;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <h1>📋 포스(POS) 매장 장애 대응 가이드</h1>
+      <div class="header-meta">
+        <span>📅 작성일: 2026.03.03</span>
+        <span>👥 대상: 경영지원팀 / 매장 관리자</span>
+        <span>🎯 소프트웨어팀 없이 현장 1차 대응 가이드</span>
+      </div>
+    </div>
+
+    <!-- 대응 흐름 -->
+    <div class="flow">
+      <span class="step">① 증상 확인</span>
+      <span class="arrow">→</span>
+      <span class="step">② 아이디 확인</span>
+      <span class="arrow">→</span>
+      <span class="step">③ 경영지원 알림</span>
+      <span class="arrow">→</span>
+      <span class="step">④ 1차 대응</span>
+      <span class="arrow">→</span>
+      <span class="step">⑤ 2차 대응</span>
+      <span class="arrow">→</span>
+      <span class="step">⑥ 비상 운영</span>
+    </div>
+
+    <!-- 1. 장애 유형별 대응 매뉴얼 -->
+    <div class="section">
+      <h2 class="section-title">1. 장애 유형별 대응 매뉴얼</h2>
+
+      <!-- 1-1 -->
+      <h3 class="subsection-title">1-1. 인터넷 장애 시</h3>
+
+      <div class="block block-symptom">
+        <div class="block-title">🔴 증상</div>
+        <ul>
+          <li>포스 화면에 "네트워크 연결 실패" 또는 "서버 연결 안됨" 표시</li>
+          <li>결제 처리 안됨 / 메뉴 로딩 안됨</li>
+        </ul>
+      </div>
+
+      <div class="block block-precheck">
+        <div class="block-title">⚠️ 사전 확인</div>
+        <ul>
+          <li>매장 아이디 및 스태프 아이디가 정상인지 확인</li>
+          <li>위 확인 후에도 해결되지 않으면 → <strong>경영지원에 알린 후</strong> 1차 대응 진행</li>
+        </ul>
+      </div>
+
+      <div class="block block-primary">
+        <div class="block-title">🔵 1차 대응 (경영지원/매장)</div>
+        <ol>
+          <li><strong>공유기(라우터) 확인</strong>
+            <ul class="sub-list">
+              <li>공유기 전원 OFF → 10초 대기 → 전원 ON</li>
+              <li>공유기 표시등 확인 (정상: 녹색 점등 / 이상: 빨간색 또는 소등)</li>
+            </ul>
+          </li>
+          <li><strong>랜선 확인</strong>
+            <ul class="sub-list">
+              <li>포스 ↔ 공유기 랜선 빠져있는지 확인</li>
+              <li>랜선 뽑았다가 딸깍 소리 날 때까지 다시 꽂기</li>
+            </ul>
+          </li>
+          <li><strong>다른 기기 인터넷 확인</strong>
+            <ul class="sub-list">
+              <li>매장 내 다른 기기(휴대폰 와이파이 등)로 인터넷 되는지 확인</li>
+              <li>다른 기기도 안 되면 → 통신사 문제 (통신사 고객센터 연락)</li>
+              <li>다른 기기는 되는데 포스만 안 되면 → 포스 네트워크 설정 문제</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div class="block block-secondary">
+        <div class="block-title">⬜ 2차 대응 (소프트웨어팀 연락)</div>
+        <ul>
+          <li>위 1차 대응으로 해결 안 될 경우 소프트웨어팀에 연락</li>
+          <li>연락 시 전달 사항: 증상, 공유기 재시작 여부, 다른 기기 인터넷 가능 여부</li>
+        </ul>
+      </div>
+
+      <div class="block block-emergency">
+        <div class="block-title">🟢 비상 운영 (플랜B)</div>
+        <ul>
+          <li><strong>수기 주문서로 전환</strong> (별도 양식 비치)</li>
+          <li>주문 내용, 시간, 금액 기록</li>
+          <li>현금/계좌이체 결제 유도 (카드결제 불가 시)</li>
+          <li>포스 복구 후 → <strong>수기 내용을 포스에 일괄 입력</strong></li>
+        </ul>
+      </div>
+
+      <hr class="divider">
+
+      <!-- 1-2 -->
+      <h3 class="subsection-title">1-2. 포스 프로그램 오류 시</h3>
+
+      <div class="block block-symptom">
+        <div class="block-title">🔴 증상</div>
+        <ul>
+          <li>포스 프로그램 먹통 / 화면 멈춤</li>
+          <li>버튼 클릭 반응 없음</li>
+          <li>오류 메시지 팝업</li>
+        </ul>
+      </div>
+
+      <div class="block block-precheck">
+        <div class="block-title">⚠️ 사전 확인</div>
+        <ul>
+          <li>매장 아이디 및 스태프 아이디가 정상인지 확인</li>
+          <li>위 확인 후에도 해결되지 않으면 → <strong>경영지원에 알린 후</strong> 1차 대응 진행</li>
+        </ul>
+      </div>
+
+      <div class="block block-primary">
+        <div class="block-title">🔵 1차 대응 (경영지원/매장)</div>
+        <ol>
+          <li><strong>프로그램 강제 종료 후 재시작</strong>
+            <ul class="sub-list">
+              <li>Ctrl + Alt + Delete → 작업관리자 → 포스 프로그램 선택 → 작업 끝내기</li>
+              <li>바탕화면에서 포스 프로그램 다시 실행</li>
+            </ul>
+          </li>
+          <li><strong>컴퓨터 재부팅</strong>
+            <ul class="sub-list">
+              <li>프로그램 재시작으로 안 되면 컴퓨터 전체 재부팅</li>
+              <li>시작 → 전원 → 다시 시작</li>
+            </ul>
+          </li>
+          <li><strong>캐시/임시파일 삭제</strong> (고급)
+            <ul class="sub-list">
+              <li>[구체적인 경로 및 방법 추가 필요]</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div class="block block-secondary">
+        <div class="block-title">⬜ 2차 대응 (소프트웨어팀 연락)</div>
+        <ul>
+          <li>재부팅 후에도 동일 증상이면 연락</li>
+          <li>전달 사항: 오류 메시지 내용 (사진 촬영), 발생 시점, 어떤 작업 중이었는지</li>
+        </ul>
+      </div>
+
+      <div class="block block-emergency">
+        <div class="block-title">🟢 비상 운영 (플랜B)</div>
+        <ul>
+          <li>수기 주문서 전환 (인터넷 장애 시와 동일)</li>
+        </ul>
+      </div>
+
+      <hr class="divider">
+
+      <!-- 1-3 -->
+      <h3 class="subsection-title">1-3. 하드웨어(컴퓨터) 이상 시</h3>
+
+      <div class="block block-symptom">
+        <div class="block-title">🔴 증상</div>
+        <ul>
+          <li>컴퓨터 전원 안 켜짐</li>
+          <li>모니터 화면 안 나옴</li>
+          <li>이상한 소리 (삐 소리, 팬 소음 과다)</li>
+          <li>블루스크린 (파란 화면에 오류 코드)</li>
+        </ul>
+      </div>
+
+      <div class="block block-precheck">
+        <div class="block-title">⚠️ 사전 확인</div>
+        <ul>
+          <li>매장 아이디 및 스태프 아이디가 정상인지 확인</li>
+          <li>위 확인 후에도 해결되지 않으면 → <strong>경영지원에 알린 후</strong> 1차 대응 진행</li>
+        </ul>
+      </div>
+
+      <div class="block block-primary">
+        <div class="block-title">🔵 1차 대응 (경영지원/매장)</div>
+        <ol>
+          <li><strong>전원/케이블 확인</strong>
+            <ul class="sub-list">
+              <li>전원 케이블 빠져있는지 확인</li>
+              <li>멀티탭 스위치 ON 확인</li>
+              <li>모니터 케이블(HDMI/DP) 확인</li>
+            </ul>
+          </li>
+          <li><strong>전원 초기화</strong>
+            <ul class="sub-list">
+              <li>전원 케이블 분리 → 30초 대기 → 다시 연결 → 전원 ON</li>
+            </ul>
+          </li>
+          <li><strong>블루스크린 발생 시</strong>
+            <ul class="sub-list">
+              <li>오류 코드 사진 촬영</li>
+              <li>전원 버튼 길게 눌러 강제 종료 → 재시작</li>
+            </ul>
+          </li>
+          <li><strong>모니터만 안 나올 때</strong>
+            <ul class="sub-list">
+              <li>모니터 전원 확인</li>
+              <li>케이블 뽑았다 다시 꽂기</li>
+              <li>다른 포트에 연결 시도</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div class="block block-secondary">
+        <div class="block-title">⬜ 2차 대응 (소프트웨어팀 또는 하드웨어 업체 연락)</div>
+        <ul>
+          <li>전원 초기화 후에도 안 되면 하드웨어 문제 가능성 높음</li>
+          <li>전달 사항: 증상, 블루스크린 사진, 이상 소리 여부</li>
+        </ul>
+      </div>
+
+      <div class="block block-emergency">
+        <div class="block-title">🟢 비상 운영 (플랜B)</div>
+        <ul>
+          <li>수기 주문서 전환</li>
+          <li>여유 노트북/태블릿이 있으면 임시 포스로 활용 검토</li>
+        </ul>
+      </div>
+
+      <hr class="divider">
+
+      <!-- 1-4 -->
+      <h3 class="subsection-title">1-4. 단말기/플레이엠디 충돌 시</h3>
+
+      <div class="block block-symptom">
+        <div class="block-title">🔴 증상</div>
+        <ul>
+          <li>단말기와 플레이엠디 프로그램 충돌</li>
+          <li>마감 처리 불가</li>
+          <li>프로그램 간 간섭으로 정상 동작 안됨</li>
+        </ul>
+      </div>
+
+      <div class="block block-precheck">
+        <div class="block-title">⚠️ 사전 확인</div>
+        <ul>
+          <li>매장 아이디 및 스태프 아이디가 정상인지 확인</li>
+          <li>위 확인 후에도 해결되지 않으면 → <strong>경영지원에 알린 후</strong> 1차 대응 진행</li>
+        </ul>
+      </div>
+
+      <div class="block block-primary">
+        <div class="block-title">🔵 1차 대응 (경영지원/매장)</div>
+        <ol>
+          <li><strong>충돌 프로그램 강제 종료</strong>
+            <ul class="sub-list">
+              <li>Ctrl + Alt + Delete → 작업관리자</li>
+              <li>플레이엠디 관련 프로세스 모두 종료</li>
+              <li>포스 프로그램도 종료</li>
+              <li>포스 프로그램만 먼저 재시작</li>
+            </ul>
+          </li>
+          <li><strong>드라이버 삭제 및 재설치 (CH341SER.EXE)</strong>
+            <ul class="sub-list">
+              <li>원인: USB 단말기 드라이버가 중복 설치되어 충돌 발생</li>
+              <li>USB 포트에서 단말기 분리</li>
+              <li><code>CH341SER.EXE</code> 실행 → <strong>UNINSTALL</strong> 클릭 (기존 드라이버 제거)</li>
+              <li>동일 파일에서 <strong>INSTALL</strong> 클릭 (드라이버 재설치)</li>
+              <li>컴퓨터 재부팅 후 단말기 재연결</li>
+            </ul>
+          </li>
+          <li><strong>기본 재설치</strong>
+            <ul class="sub-list">
+              <li>플레이엠디 프로그램 제거 (제어판 → 프로그램 제거)</li>
+              <li>재설치 파일로 새로 설치</li>
+              <li>[재설치 파일 위치/다운로드 경로 추가 필요]</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div class="block block-secondary">
+        <div class="block-title">⬜ 2차 대응 (소프트웨어팀 연락)</div>
+        <ul>
+          <li>재설치 후에도 충돌 반복 시 연락</li>
+          <li>전달 사항: 충돌 시점, 어떤 프로그램이 먼저 실행 중이었는지</li>
+        </ul>
+      </div>
+
+      <div class="block block-prevent">
+        <div class="block-title">🟣 예방 조치</div>
+        <ul>
+          <li>포스와 플레이엠디 동시 실행 시 실행 순서 통일</li>
+          <li>[권장 실행 순서 추가 필요]</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. 비상 운영 체계 -->
+    <div class="section">
+      <h2 class="section-title">2. 비상 운영 체계 (플랜B 종합)</h2>
+
+      <h3 class="subsection-title">수기 운영 전환 기준</h3>
+      <div class="block block-precheck">
+        <ul>
+          <li>포스 장애 발생 후 <strong>10분 이내 복구 불가</strong> 시 수기 전환</li>
+        </ul>
+      </div>
+
+      <h3 class="subsection-title">수기 운영 절차</h3>
+      <div class="block block-primary">
+        <ol>
+          <li>비치된 <strong>수기 주문서</strong> 사용</li>
+          <li>기록 항목: 주문시간 / 메뉴명 / 수량 / 금액 / 결제수단</li>
+          <li>현금 또는 계좌이체 결제 유도</li>
+          <li>카드결제 필요 시 → 별도 카드단말기 사용 (있는 경우)</li>
+        </ol>
+      </div>
+
+      <h3 class="subsection-title">복구 후 처리</h3>
+      <div class="block block-emergency">
+        <ol>
+          <li>포스 시스템 정상화 확인</li>
+          <li><strong>수기 기록 → 포스에 일괄 입력</strong></li>
+          <li>매출 대조 확인</li>
+          <li>장애 보고서 작성 (시간/원인/대응/결과)</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 3. 연락처 -->
+    <div class="section">
+      <h2 class="section-title">3. 연락처</h2>
+      <table class="contact-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>담당</th>
+            <th>연락처</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>소프트웨어팀</td>
+            <td>제명환</td>
+            <td>📞 010-8748-8031</td>
+          </tr>
+          <tr>
+            <td>소프트웨어팀</td>
+            <td>박시영</td>
+            <td>📞 010-4388-0841</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    포스(POS) 매장 장애 대응 가이드 · 2026.03.03 작성
+  </div>
+
+  </div>
+
+</body>
+
+</html>
